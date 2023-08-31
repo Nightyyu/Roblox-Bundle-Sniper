@@ -9,4 +9,5 @@ Download rich, pathlib and requests dependencies. Put your cookie in login.txt a
 
 # Credits
 Original code: https://github.com/insaneinthamembrane/roblox-free-item-buyer
+
 Edited by me (:
