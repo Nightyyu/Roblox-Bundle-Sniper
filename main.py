@@ -37,7 +37,7 @@ def fetch_items() -> None:
             res = req.json()
 
             if req.status_code == 429:
-                cprint("red", "Rate limited. Esperando...")
+                cprint("red", "Rate limited. Trying...")
                 time.sleep(random.uniform(5, 10))
                 continue
 
@@ -47,15 +47,15 @@ def fetch_items() -> None:
 
                 if item_type == "Bundle":
                     result[item_name] = item.get("productId")
-                    cprint("blue", f"{item_name} foi encontrado.")
+                    cprint("blue", f"Bundle found: {item_name}")
                     purchase(item_name, item.get("productId"))
                 else:
-                    cprint("yellow", f"{item_name} não é uma Bundle. Pulando para o proximo...")
+                    cprint("yellow", f"Not bundle found. Skipping: {item_name}")
 
             cursor = res.get("nextPageCursor")
 
         except requests.exceptions.RequestException:
-            cprint("red", "Conexão perdida. Tentando novamente...")
+            cprint("red", "Connection lost. Trying...")
             continue
 
     return result
@@ -74,16 +74,16 @@ def purchase(name: str, product_id: int) -> None:
             )
 
             if req.status_code == 429:
-                cprint("red", "Rate limited. Tentando novamente...")
+                cprint("red", "Rate limited. Trying...")
                 time.sleep(random.uniform(5, 10))
                 continue
 
             res = req.json()
             if "reason" in res and res.get("reason") == "AlreadyOwned":
-                cprint("yellow", f"Você já tem {name}.")
+                cprint("yellow", f"You already have: {name}.")
                 return
 
-            cprint("green", f"{name} foi comprado com sucesso.")
+            cprint("green", f"Bundle purchased successfully: {name}")
             return
 
     except requests.exceptions.RequestException:
